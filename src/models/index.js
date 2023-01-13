@@ -93,8 +93,8 @@ Job.init(
 );
 
 Profile.hasMany(Contract, { as: 'contractor', foreignKey: 'contractorId' });
-Contract.belongsTo(Profile, { as: 'contractor' });
 Profile.hasMany(Contract, { as: 'client', foreignKey: 'clientId' });
+Contract.belongsTo(Profile, { as: 'contractor' });
 Contract.belongsTo(Profile, { as: 'client' });
 Contract.hasMany(Job);
 Job.belongsTo(Contract);
