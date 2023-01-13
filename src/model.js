@@ -1,8 +1,9 @@
+/* eslint-disable max-classes-per-file */
 const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
-  storage: './database.sqlite3'
+  storage: './database.sqlite3',
 });
 
 const ProfileTypes = {
@@ -21,18 +22,18 @@ Profile.init(
   {
     firstName: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     lastName: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     profession: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
-    balance:{
-      type:Sequelize.DECIMAL(12,2)
+    balance: {
+      type: Sequelize.DECIMAL(12, 2),
     },
     type: {
       type: Sequelize.ENUM(ProfileTypes.client, ProfileTypes.contractor),
@@ -40,8 +41,8 @@ Profile.init(
   },
   {
     sequelize,
-    modelName: 'Profile'
-  }
+    modelName: 'Profile',
+  },
 );
 
 class Contract extends Sequelize.Model {}
@@ -49,7 +50,7 @@ Contract.init(
   {
     terms: {
       type: Sequelize.TEXT,
-      allowNull: false
+      allowNull: false,
     },
     status: {
       type: Sequelize.ENUM(
@@ -62,8 +63,8 @@ Contract.init(
   },
   {
     sequelize,
-    modelName: 'Contract'
-  }
+    modelName: 'Contract',
+  },
 );
 
 class Job extends Sequelize.Model {}
@@ -71,32 +72,32 @@ Job.init(
   {
     description: {
       type: Sequelize.TEXT,
-      allowNull: false
+      allowNull: false,
     },
-    price:{
-      type: Sequelize.DECIMAL(12,2),
-      allowNull: false
+    price: {
+      type: Sequelize.DECIMAL(12, 2),
+      allowNull: false,
     },
     paid: {
       type: Sequelize.BOOLEAN,
       defaultValue: false,
     },
-    paymentDate:{
-      type: Sequelize.DATE
-    }
+    paymentDate: {
+      type: Sequelize.DATE,
+    },
   },
   {
     sequelize,
-    modelName: 'Job'
-  }
+    modelName: 'Job',
+  },
 );
 
-Profile.hasMany(Contract, {as :'contractor',foreignKey:'contractorId'})
-Contract.belongsTo(Profile, {as: 'contractor'})
-Profile.hasMany(Contract, {as : 'client', foreignKey:'clientId'})
-Contract.belongsTo(Profile, {as: 'client'})
-Contract.hasMany(Job)
-Job.belongsTo(Contract)
+Profile.hasMany(Contract, { as: 'contractor', foreignKey: 'contractorId' });
+Contract.belongsTo(Profile, { as: 'contractor' });
+Profile.hasMany(Contract, { as: 'client', foreignKey: 'clientId' });
+Contract.belongsTo(Profile, { as: 'client' });
+Contract.hasMany(Job);
+Job.belongsTo(Contract);
 
 module.exports = {
   sequelize,
