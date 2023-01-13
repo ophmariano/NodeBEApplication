@@ -5,6 +5,17 @@ const sequelize = new Sequelize({
   storage: './database.sqlite3'
 });
 
+const ProfileTypes = {
+  client: 'client',
+  contractor: 'contractor',
+};
+
+const ContractStatus = {
+  new: 'new',
+  in_progress: 'in_progress',
+  terminated: 'terminated',
+};
+
 class Profile extends Sequelize.Model {}
 Profile.init(
   {
@@ -24,8 +35,8 @@ Profile.init(
       type:Sequelize.DECIMAL(12,2)
     },
     type: {
-      type: Sequelize.ENUM('client', 'contractor')
-    }
+      type: Sequelize.ENUM(ProfileTypes.client, ProfileTypes.contractor),
+    },
   },
   {
     sequelize,
@@ -40,9 +51,14 @@ Contract.init(
       type: Sequelize.TEXT,
       allowNull: false
     },
-    status:{
-      type: Sequelize.ENUM('new','in_progress','terminated')
-    }
+    status: {
+      type: Sequelize.ENUM(
+        ContractStatus.new,
+        ContractStatus.in_progress,
+        ContractStatus.terminated,
+      ),
+      defaultValue: ContractStatus.new,
+    },
   },
   {
     sequelize,
@@ -63,7 +79,7 @@ Job.init(
     },
     paid: {
       type: Sequelize.BOOLEAN,
-      default:false
+      defaultValue: false,
     },
     paymentDate:{
       type: Sequelize.DATE
@@ -86,5 +102,7 @@ module.exports = {
   sequelize,
   Profile,
   Contract,
-  Job
+  Job,
+  ProfileTypes,
+  ContractStatus,
 };
