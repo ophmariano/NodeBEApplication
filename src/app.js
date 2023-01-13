@@ -6,7 +6,7 @@ const { getProfile } = require('./middleware/getProfile');
 const app = express();
 app.use(bodyParser.json());
 app.set('sequelize', sequelize);
-app.set('models', sequelize.models);
+// app.set('models', sequelize.models);
 
 /**
  * Testing

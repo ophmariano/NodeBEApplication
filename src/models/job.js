@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-module.exports = class Job extends Sequelize.Model {
+class Job extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
@@ -30,4 +30,8 @@ module.exports = class Job extends Sequelize.Model {
   static associate(db) {
     db.Job.belongsTo(db.Contract);
   }
+}
+
+module.exports = {
+  Job,
 };

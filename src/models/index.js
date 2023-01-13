@@ -1,109 +1,26 @@
-/* eslint-disable max-classes-per-file */
 const Sequelize = require('sequelize');
+const { Profile } = require('./profile');
+const { Contract } = require('./contract');
+const { Job } = require('./job');
 
+const dataBase = {};
+// TODO: make config file
 const sequelize = new Sequelize({
   dialect: 'sqlite',
   storage: './database.sqlite3',
 });
 
-const ProfileTypes = {
-  client: 'client',
-  contractor: 'contractor',
-};
+dataBase.sequelize = sequelize;
+dataBase.Profile = Profile;
+dataBase.Contract = Contract;
+dataBase.Job = Job;
 
-const ContractStatus = {
-  new: 'new',
-  in_progress: 'in_progress',
-  terminated: 'terminated',
-};
+dataBase.Profile.init(sequelize);
+dataBase.Contract.init(sequelize);
+dataBase.Job.init(sequelize);
 
-class Profile extends Sequelize.Model {}
-Profile.init(
-  {
-    firstName: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    lastName: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    profession: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    balance: {
-      type: Sequelize.DECIMAL(12, 2),
-    },
-    type: {
-      type: Sequelize.ENUM(ProfileTypes.client, ProfileTypes.contractor),
-    },
-  },
-  {
-    sequelize,
-    modelName: 'Profile',
-  },
-);
+dataBase.Profile.associate(dataBase);
+dataBase.Contract.associate(dataBase);
+dataBase.Job.associate(dataBase);
 
-class Contract extends Sequelize.Model {}
-Contract.init(
-  {
-    terms: {
-      type: Sequelize.TEXT,
-      allowNull: false,
-    },
-    status: {
-      type: Sequelize.ENUM(
-        ContractStatus.new,
-        ContractStatus.in_progress,
-        ContractStatus.terminated,
-      ),
-      defaultValue: ContractStatus.new,
-    },
-  },
-  {
-    sequelize,
-    modelName: 'Contract',
-  },
-);
-
-class Job extends Sequelize.Model {}
-Job.init(
-  {
-    description: {
-      type: Sequelize.TEXT,
-      allowNull: false,
-    },
-    price: {
-      type: Sequelize.DECIMAL(12, 2),
-      allowNull: false,
-    },
-    paid: {
-      type: Sequelize.BOOLEAN,
-      defaultValue: false,
-    },
-    paymentDate: {
-      type: Sequelize.DATE,
-    },
-  },
-  {
-    sequelize,
-    modelName: 'Job',
-  },
-);
-
-Profile.hasMany(Contract, { as: 'contractor', foreignKey: 'contractorId' });
-Profile.hasMany(Contract, { as: 'client', foreignKey: 'clientId' });
-Contract.belongsTo(Profile, { as: 'contractor' });
-Contract.belongsTo(Profile, { as: 'client' });
-Contract.hasMany(Job);
-Job.belongsTo(Contract);
-
-module.exports = {
-  sequelize,
-  Profile,
-  Contract,
-  Job,
-  ProfileTypes,
-  ContractStatus,
-};
+module.exports = dataBase;
