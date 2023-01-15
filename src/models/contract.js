@@ -26,14 +26,15 @@ class Contract extends Sequelize.Model {
       {
         sequelize,
         modelName: 'Contract',
+        tableName: 'Contracts',
       },
     );
   }
 
-  static associate(db) {
-    db.Contract.belongsTo(db.Profile, { as: 'contractor' });
-    db.Contract.belongsTo(db.Profile, { as: 'client' });
-    db.Contract.hasMany(db.Job);
+  static associate(dataBase) {
+    dataBase.Contract.belongsTo(dataBase.Profile, { as: 'contractor' });
+    dataBase.Contract.belongsTo(dataBase.Profile, { as: 'client' });
+    dataBase.Contract.hasMany(dataBase.Job, { as: 'contract', foreignKey: 'contractId' });
   }
 }
 

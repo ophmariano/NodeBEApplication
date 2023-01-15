@@ -31,7 +31,7 @@ class Profile extends Sequelize.Model {
       {
         sequelize,
         modelName: 'Profile',
-        tableName: 'profile',
+        tableName: 'Profiles',
         timestamps: true,
         paranoid: true,
       },

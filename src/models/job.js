@@ -23,12 +23,13 @@ class Job extends Sequelize.Model {
       {
         sequelize,
         modelName: 'Job',
+        tableName: 'Jobs',
       },
     );
   }
 
-  static associate(db) {
-    db.Job.belongsTo(db.Contract);
+  static associate(dataBase) {
+    dataBase.Job.belongsTo(dataBase.Contract, { as: 'contract' });
   }
 }
 
