@@ -1,0 +1,4 @@
+### Contract Endpoint
+### Same contract
+GET http://localhost:3001/api/v1/contracts/1
+x-profile_id:1
