@@ -52,3 +52,14 @@ content-type: application/json
 ### /admin/best-profession?start=<date>&end=<date> - best profession
 GET http://localhost:3001/api/v1/admin/best-profession?start=2020-08-10&end=2020-08-18
 x-profile_id:1
+
+### Admin
+### /admin/best-clients?start=<date>&end=<date> - best clients
+GET http://localhost:3001/api/v1/admin/best-clients?start=2020-08-10&end=2020-08-18
+x-profile_id:1
+
+### Admin
+### /admin/best-clients?start=<date>&end=<date> - best clients
+GET http://localhost:3001/api/v1/admin/best-clients?start=2020-08-10&end=2020-08-18&limit=1
+x-profile_id:1
+

@@ -32,6 +32,38 @@ const getBestProfession = async (req, res) => {
   return res.json(bestProfession);
 };
 
+const getBestClients = async (req, res) => {
+  const defaultLimit = 2;
+  const limitValue = parseInt(req.query.limit || defaultLimit, 10);
+
+  const startDate = new Date(req.query.start);
+  const endDate = new Date(req.query.end);
+
+  if (!startDate || !endDate) {
+    return res.status(httpStatusCodes.BAD_REQUEST).send({
+      status: 'FAILED',
+      data: {
+        error: 'The date send is not valid.',
+      },
+    });
+  }
+
+  const beginningOfDay = moment(startDate, 'YYYY-MM-DD').startOf('day');
+  const endOfDay = moment(endDate, 'YYYY-MM-DD').endOf('day');
+
+  const bestClients = await profileService.getBestClient(beginningOfDay, endOfDay, limitValue);
+  if (!bestClients) {
+    return res.status(httpStatusCodes.BAD_REQUEST).send({
+      status: 'FAILED',
+      data: {
+        error: 'Nothing was paid during this period.',
+      },
+    });
+  }
+  return res.json(bestClients);
+};
+
 module.exports = {
   getBestProfession,
+  getBestClients,
 };

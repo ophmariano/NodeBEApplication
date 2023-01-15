@@ -39,8 +39,8 @@ class Profile extends Sequelize.Model {
   }
 
   static associate(dataBase) {
-    dataBase.Profile.hasMany(dataBase.Contract, { as: 'contractor', foreignKey: 'contractorId' });
-    dataBase.Profile.hasMany(dataBase.Contract, { as: 'client', foreignKey: 'clientId' });
+    dataBase.Profile.hasMany(dataBase.Contract, { as: 'profileContractor', foreignKey: 'contractorId' });
+    dataBase.Profile.hasMany(dataBase.Contract, { as: 'profileClient', foreignKey: 'clientId' });
   }
 }
 
