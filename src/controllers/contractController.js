@@ -40,6 +40,22 @@ const getOneContract = async (req, res) => {
   return res.json(contract);
 };
 
+const getAllActiveContractsForProfileId = async (req, res) => {
+  const profileId = parseInt(req.get('x-profile_id'), 10);
+  const contracts = await contractService.getAllActiveContractsForProfileId(profileId);
+  if (!contracts) {
+    return res.status(httpStatusCodes.NOT_FOUND).send({
+      status: 'FAILED',
+      data: {
+        error:
+          'The contract was not found.',
+      },
+    });
+  }
+  return res.json(contracts);
+};
+
 module.exports = {
   getOneContract,
+  getAllActiveContractsForProfileId,
 };

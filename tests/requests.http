@@ -2,3 +2,11 @@
 ### Same contract
 GET http://localhost:3001/api/v1/contracts/1
 x-profile_id:1
+
+### Diferent profile than contracts should return 500
+GET http://localhost:3001/api/v1/contracts/1
+x-profile_id:2
+
+### get all non terminated contracts 
+GET http://localhost:3001/api/v1/contracts
+x-profile_id:1
