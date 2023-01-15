@@ -34,3 +34,15 @@ x-profile_id:2
 ### /jobs/:job_id/pay - can't pay for job that is not yours
 POST http://localhost:3001/api/v1/jobs/5/pay
 x-profile_id:1
+
+
+### Balance
+### /balances/deposit/:userId - deposit on accout
+POST http://localhost:3001/api/v1/balances/deposit/1
+x-profile_id:1
+content-type: application/json
+
+{
+    "clientId": 1,
+    "amount": 2
+}

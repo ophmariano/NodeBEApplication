@@ -46,6 +46,37 @@ const getUnpaidJobs = async (profileId) => {
   }
 };
 
+const getClientUnpaidJobs = async (clientId) => {
+  try {
+    const jobs = await Job.findAll({
+      include: {
+        model: Contract,
+        as: 'contract',
+        required: true,
+        where: {
+          [Op.and]: [
+            {
+              [Op.or]: [
+                { status: ContractStatus.new },
+                { status: ContractStatus.in_progress },
+              ],
+            },
+            {
+              clientId,
+            },
+          ],
+        },
+      },
+      where: {
+        paid: false,
+      },
+    });
+    return jobs;
+  } catch (error) {
+    throw new ApiError(httpStatusCodes.INTERNAL_SERVER, error.message);
+  }
+};
+
 const payForJob = async (client, contractor, jobBeingPayed) => {
   try {
     await sequelize.transaction(
@@ -66,5 +97,6 @@ const payForJob = async (client, contractor, jobBeingPayed) => {
 module.exports = {
   getJobById,
   getUnpaidJobs,
+  getClientUnpaidJobs,
   payForJob,
 };
