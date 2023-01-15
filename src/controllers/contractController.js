@@ -28,7 +28,7 @@ const getOneContract = async (req, res) => {
   }
 
   if ((contract.contractorId !== profileId) && (contract.clientId !== profileId)) {
-    return res.status(httpStatusCodes.UNAUTHORIZED).send({
+    return res.status(httpStatusCodes.BAD_REQUEST).send({
       status: 'FAILED',
       data: {
         error:

@@ -1,7 +1,16 @@
 const { Op } = require('sequelize');
 const { ApiError, httpStatusCodes } = require('../exceptions/apiExceptions');
-const { Job } = require('../models');
+const { Job, sequelize } = require('../models');
 const { Contract, ContractStatus } = require('../models/contract');
+
+const getJobById = async (id) => {
+  try {
+    const job = await Job.findOne({ where: { id } });
+    return job;
+  } catch (error) {
+    throw new ApiError(httpStatusCodes.INTERNAL_SERVER, error.message);
+  }
+};
 
 const getUnpaidJobs = async (profileId) => {
   try {
@@ -37,6 +46,25 @@ const getUnpaidJobs = async (profileId) => {
   }
 };
 
+const payForJob = async (client, contractor, jobBeingPayed) => {
+  try {
+    await sequelize.transaction(
+      async (transaction) => {
+        await client.decrement('balance', { by: jobBeingPayed.price, transaction });
+        await contractor.increment('balance', { by: jobBeingPayed.price, transaction });
+        await jobBeingPayed.update({
+          paid: true,
+        }, {
+          where: { id: jobBeingPayed.id }, transaction,
+        });
+      },
+    );
+  } catch (error) {
+    throw new ApiError(httpStatusCodes.INTERNAL_SERVER, error.message);
+  }
+};
 module.exports = {
+  getJobById,
   getUnpaidJobs,
+  payForJob,
 };
