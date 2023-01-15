@@ -20,6 +20,15 @@ const getBestProfession = async (req, res) => {
   const endOfDay = moment(endDate, 'YYYY-MM-DD').endOf('day');
 
   const bestProfession = await profileService.getBestProfession(beginningOfDay, endOfDay);
+
+  if (!bestProfession) {
+    return res.status(httpStatusCodes.BAD_REQUEST).send({
+      status: 'FAILED',
+      data: {
+        error: 'Nothing was yearned during this period.',
+      },
+    });
+  }
   return res.json(bestProfession);
 };
 
