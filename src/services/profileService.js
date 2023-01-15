@@ -1,5 +1,8 @@
+const { Op } = require('sequelize');
 const { ApiError, httpStatusCodes } = require('../exceptions/apiExceptions');
-const { Profile, sequelize } = require('../models');
+const {
+  Profile, Job, Contract, sequelize,
+} = require('../models');
 
 const getProfileById = async (id) => {
   try {
@@ -22,7 +25,44 @@ const depositBalanceForClient = async (client, depositAmount) => {
   }
 };
 
+const getBestProfession = async (beginningOfDay, endOfDay) => {
+  try {
+    const profiles = await Profile.findAll({
+      attributes: ['profession',
+        [sequelize.fn('sum', sequelize.col('price')), 'totalPayed'],
+      ],
+      include: [{
+        model: Contract,
+        as: 'contractor',
+        required: true,
+        include: {
+          model: Job,
+          as: 'contract',
+          required: true,
+          where: {
+            paid: true,
+            paymentDate: {
+              [Op.gte]: beginningOfDay,
+              [Op.lte]: endOfDay,
+            },
+          },
+        },
+      },
+      ],
+      where: {
+        type: 'contractor',
+      },
+      group: 'profession',
+      order: [['totalPayed', 'DESC']],
+    });
+    return profiles[0];
+  } catch (error) {
+    throw new ApiError(httpStatusCodes.INTERNAL_SERVER, error.message);
+  }
+};
+
 module.exports = {
   getProfileById,
   depositBalanceForClient,
+  getBestProfession,
 };
