@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { sequelize } = require('./models');
 const v1ContractRoutes = require('./v1/routes/contractRoutes');
+const v1JobRoutes = require('./v1/routes/jobRoutes');
 
 const app = express();
 
@@ -18,6 +19,7 @@ sequelize.sync({ force: false })
 
 app.use(bodyParser.json());
 app.use('/api/v1/contracts', v1ContractRoutes);
+app.use('/api/v1/jobs', v1JobRoutes);
 
 /**
  * Testing
