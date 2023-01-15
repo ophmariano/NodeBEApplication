@@ -1,3 +1,4 @@
+const { ApiError, httpStatusCodes } = require('../exceptions/apiExceptions');
 const { Contract } = require('../models');
 
 const getOneContract = async (id) => {
@@ -5,7 +6,7 @@ const getOneContract = async (id) => {
     const contract = await Contract.findOne({ where: { id } });
     return contract;
   } catch (error) {
-    throw error;
+    throw new ApiError(httpStatusCodes.INTERNAL_SERVER, error.message);
   }
 };
 
