@@ -1,21 +1,36 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const {sequelize} = require('./model')
-const {getProfile} = require('./middleware/getProfile')
+const { sequelize } = require('./models');
+const v1ContractRoutes = require('./v1/routes/contractRoutes');
+const v1JobRoutes = require('./v1/routes/jobRoutes');
+const v1BalanceRoutes = require('./v1/routes/balanceRoutes');
+const v1AdminRoutes = require('./v1/routes/adminRoutes');
+
 const app = express();
+
+// TODO: check if needed
+// app.set('sequelize', sequelize);
+
+sequelize.sync({ force: false })
+  .then(() => {
+    console.log('DB connection success.');
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+
 app.use(bodyParser.json());
-app.set('sequelize', sequelize)
-app.set('models', sequelize.models)
+app.use('/api/v1/contracts', v1ContractRoutes);
+app.use('/api/v1/jobs', v1JobRoutes);
+app.use('/api/v1/balances', v1BalanceRoutes);
+app.use('/api/v1/admin', v1AdminRoutes);
 
 /**
- * FIX ME!
- * @returns contract by id
+ * Testing
+ * TODO: Remove after
  */
-app.get('/contracts/:id',getProfile ,async (req, res) =>{
-    const {Contract} = req.app.get('models')
-    const {id} = req.params
-    const contract = await Contract.findOne({where: {id}})
-    if(!contract) return res.status(404).end()
-    res.json(contract)
-})
+app.get('/', (req, res) => {
+  res.send('<h2>Yes, I don\'t know why but it\'s working just fine... for now!</h2>');
+});
+
 module.exports = app;

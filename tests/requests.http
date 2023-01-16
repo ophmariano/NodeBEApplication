@@ -1,0 +1,65 @@
+### Contract Endpoint
+### Same contract
+GET http://localhost:3001/api/v1/contracts/1
+x-profile_id:1
+
+### Diferent profile than contracts should return 500
+GET http://localhost:3001/api/v1/contracts/1
+x-profile_id:2
+
+### get all non terminated contracts for profile id
+GET http://localhost:3001/api/v1/contracts
+x-profile_id:1
+
+### JOBS
+### /jobs/unpaid - get all active unpaid jobs for profile id
+GET http://localhost:3001/api/v1/jobs/unpaid
+x-profile_id:2
+
+### /jobs/:job_id/pay - pay for job
+POST http://localhost:3001/api/v1/jobs/1/pay
+x-profile_id:1
+
+### /jobs/:job_id/pay - not have balance (can't pay all)
+POST http://localhost:3001/api/v1/jobs/3/pay
+x-profile_id:2
+### /jobs/:job_id/pay - not have balance (can't pay all)
+POST http://localhost:3001/api/v1/jobs/4/pay
+x-profile_id:2
+
+### /jobs/:job_id/pay - already payed
+POST http://localhost:3001/api/v1/jobs/8/pay
+x-profile_id:2
+
+### /jobs/:job_id/pay - can't pay for job that is not yours
+POST http://localhost:3001/api/v1/jobs/5/pay
+x-profile_id:1
+
+
+### Balance
+### /balances/deposit/:userId - deposit on accout
+POST http://localhost:3001/api/v1/balances/deposit/1
+x-profile_id:1
+content-type: application/json
+
+{
+    "clientId": 1,
+    "amount": 2
+}
+
+
+### Admin
+### /admin/best-profession?start=<date>&end=<date> - best profession
+GET http://localhost:3001/api/v1/admin/best-profession?start=2020-08-10&end=2020-08-18
+x-profile_id:1
+
+### Admin
+### /admin/best-clients?start=<date>&end=<date> - best clients
+GET http://localhost:3001/api/v1/admin/best-clients?start=2020-08-10&end=2020-08-18
+x-profile_id:1
+
+### Admin
+### /admin/best-clients?start=<date>&end=<date> - best clients
+GET http://localhost:3001/api/v1/admin/best-clients?start=2020-08-10&end=2020-08-18&limit=1
+x-profile_id:1
+
